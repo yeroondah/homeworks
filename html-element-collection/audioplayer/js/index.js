@@ -2,7 +2,7 @@
 
 
 let audio = getAudio();
-let buttons = document.getElementsByClassName('fa');
+let buttons = document.getElementsByTagName('button');
 let player = getPlayer();
 let title = document.getElementsByClassName('title');
 
@@ -23,21 +23,20 @@ let tracks = [
 
 
 for (let button of buttons) {
-	if (button.classList.contains('fa-play')) {
+	if (button.classList.contains('playstate')) {
 		button.onclick = function() {
-			player.classList.toggle('play');
-			audio.play();
+			if (audio.paused) {
+				player.classList.toggle('play');
+				audio.play();
+			}
+			else {
+				player.classList.toggle('play');
+				audio.pause();
+			}
 		}
 	}
 
-	if (button.classList.contains('fa-pause')) {
-		button.onclick = function() {
-			player.classList.toggle('play');
-			audio.pause();
-		}
-	}
-
-	if (button.classList.contains('fa-stop')) {
+	if (button.classList.contains('stop')) {
 		button.onclick = function() {
 			player.classList.remove('play');
 			audio.pause();
@@ -45,7 +44,7 @@ for (let button of buttons) {
 		}
 	}
 
-	if (button.classList.contains('fa-backward')) {
+	if (button.classList.contains('back')) {
 		button.onclick = function() {
 			let index = getIndex();
 			index--;
@@ -60,7 +59,7 @@ for (let button of buttons) {
 		}
 	}
 
-	if (button.classList.contains('fa-forward')) {
+	if (button.classList.contains('next')) {
 		button.onclick = function() {
 			let index = getIndex();
 			index++;
