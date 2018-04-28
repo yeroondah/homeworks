@@ -15,9 +15,9 @@ const notes = {
   middle: [
     'sounds/middle/first.mp3',
     'sounds/middle/second.mp3',
-	'sounds/middle/third.mp3',
-	'sounds/middle/fourth.mp3',
-	'sounds/middle/fifth.mp3'
+	  'sounds/middle/third.mp3',
+	  'sounds/middle/fourth.mp3',
+	  'sounds/middle/fifth.mp3'
   ],
 
   lower: [
@@ -74,19 +74,21 @@ function playNote() {
 
 
 function keyDown(e) {
-  if (e.shiftKey) {
-    for(let set of noteSet) {
-	  set.classList.remove('middle');
-	  set.classList.add('lower');
+  if(!e.repeat) {
+    if (e.shiftKey) {
+      for(let set of noteSet) {
+      set.classList.remove('middle');
+      set.classList.add('lower');
     }
     loadNoteSet();
-  }
-  if (e.altKey) {
-    for(let set of noteSet) {
-	  set.classList.remove('middle');
-	  set.classList.add('higher');
-	}
-	loadNoteSet();
+    }
+    if (e.altKey) {
+      for(let set of noteSet) {
+      set.classList.remove('middle');
+      set.classList.add('higher');
+    }
+    loadNoteSet();
+    }
   }
 }
 
