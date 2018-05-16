@@ -8,22 +8,24 @@ const starColors = [
   '#d4fbff'
 ];
 
+makeStars();
+
 canvas.addEventListener('click', makeStars);
 
 function makeStars() {
-	context.clearRect(0, 0, canvas.width, canvas.height);
+  context.clearRect(0, 0, canvas.width, canvas.height);
 
-	let starNumber = 0;
-	let starsQty = randomStarsQty();
+  let starNumber = 0;
+  let starsQty = randomStarsQty();
 
-	for (starNumber; starNumber < starsQty; starNumber++) {
-		context.beginPath();
-		context.arc(randomStarPositionX(), randomStarPositionY(), randomStarSize(), 0, 2 * Math.PI);
-		context.fillStyle = randomStarColor();
-		context.globalAlpha = randomStarBrightness();
-		context.fill();
-		context.closePath();
-	}
+  for (starNumber; starNumber < starsQty; starNumber++) {
+    context.beginPath();
+    context.arc(randomStarPositionX(), randomStarPositionY(), randomStarSize(), 0, 2 * Math.PI);
+    context.fillStyle = randomStarColor();
+    context.globalAlpha = randomStarBrightness();
+    context.fill();
+    context.closePath();
+  }
 }
 
 function randomStarsQty() {
@@ -32,9 +34,9 @@ function randomStarsQty() {
 }
 
 function randomStarColor() {
-    let min = 0, max = 3;
-		let colorIndex = Math.floor(Math.random() * (max - min) + min);
-    return starColors[colorIndex];
+  let min = 0, max = 3;
+  let colorIndex = Math.floor(Math.random() * (max - min) + min);
+  return starColors[colorIndex];
 }
 
 function randomStarBrightness() {
@@ -54,7 +56,7 @@ function randomStarPositionY() {
 }
 
 function randomStarSize() {
-  let min = 0.8, max = 1.1;
+  let min = 0, max = 1;
   return Math.round((Math.random() * (max - min) + min) * 10) / 10;
 }
 
