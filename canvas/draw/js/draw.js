@@ -1,100 +1,121 @@
 'use strict';
 
-const draw = document.getElementById('draw');
-const ctx = draw.getContext('2d');
-const PI = Math.PI;
-let drawing = false; // Статус рисования
-const lineSize = changeLineSize(); // Размер
-const hue = changeHue(); // Цвет
-
-ctx.lineJoin = 'round';
-ctx.lineCap = 'round';
-
-document.body.style.overflow = 'hidden';
-
-sizeDraw();
+const canvas = document.getElementById('draw');
+const context = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+let penSize = 100;
+let maxPenSizeReached = false;
+let penHue = 0;
+let drawing = false;
+let pointsX = [];
+let pointsY = [];
+let shiftPressed = false;
 
 window.addEventListener('resize', () => {
-  sizeDraw();
+	canvasResize();
+	clearCanvas();
 });
 
-draw.addEventListener("mousedown", (e) => {
-  drawing = true;
+canvas.addEventListener('dblclick', clearCanvas);
+
+canvas.addEventListener('mousedown', (e) => {
+	drawing = true;
+	context.beginPath();
+	context.fillStyle = `hsl(${penHue}, 100%, 50%)`;
+	context.arc(e.clientX, e.clientY, penSizeChanger() / 2, 0, 2 * Math.PI);
+	context.fill();
+	context.closePath();
 });
 
-draw.addEventListener("mouseup", () => {
-  drawing = false;
+canvas.addEventListener('mouseleave', () => {
+	drawing = false;
+	pointsX = [];
+	pointsY = [];
 });
 
-draw.addEventListener("mouseleave", () => {
-  drawing = false;
+canvas.addEventListener('mouseup', () => {
+	drawing = false;
+	pointsX = [];
+	pointsY = [];
 });
 
-draw.addEventListener("mousemove", (e) => {
-  if (drawing) {
-    const point = [e.offsetX, e.offsetY];
-    circle(point, lineSize(), hue(e));
-  }
+canvas.addEventListener('mousemove', (e) => {
+	if (drawing) {
+		pointsX.push(e.clientX);
+		pointsY.push(e.clientY);
+		
+		unitePoints();
+	};
 });
 
-draw.addEventListener('dblclick', () => {
-  ctx.clearRect(0, 0, draw.width, draw.height);
+window.addEventListener('keydown', function(e) {
+  if (!e.repeat) {
+		if (e.key === 'Shift') {
+			shiftPressed = true;
+		}
+	}	
 });
 
-function circle(point, size, hue) {
-  ctx.beginPath();
-  ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-  ctx.arc(...point, size, 0, 2 * PI);
-  ctx.fill();
+window.addEventListener('keyup', function(e) {
+	if (e.key === 'Shift') {
+		shiftPressed = false;
+	}	
+});
+
+
+
+function unitePoints() {
+	context.beginPath();
+	context.lineWidth = penSize;
+	context.lineJoin = 'round';
+	context.lineCap = 'round';
+	context.strokeStyle = `hsl(${penHue}, 100%, 50%)`;
+	context.moveTo(pointsX[pointsX.length - 2], pointsY[pointsY.length - 2]);
+	context.lineTo(pointsX[pointsX.length - 1], pointsY[pointsY.length - 1]);
+	context.stroke();
+	context.closePath();
+	penHueChanger();
+	penSizeChanger();
 }
 
-function sizeDraw() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  draw.setAttribute('width', width);
-  draw.setAttribute('height', height);
-
-  ctx.clearRect(0, 0, width, height);
+function clearCanvas() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function changeLineSize() {
-  const lineMinWidth = 5;
-  const lineMaxWidth = 100;
-  let currentLineWidth = lineMinWidth;
-  let inc = true;
-
-  return function () {
-    if (currentLineWidth < lineMaxWidth && inc) {
-      return currentLineWidth++;
-    } else {
-      inc = false;
-    }
-
-    if (currentLineWidth > lineMinWidth && !inc) {
-      return currentLineWidth--;
-    } else {
-      inc = true;
-    }
-  }
+function canvasResize() {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 }
 
-function changeHue() {
-  const minHue = 0;
-  const maxHue = 359;
-  let currentHue = 0;
+function penSizeChanger() {
+	if (maxPenSizeReached === false) {
+		if (penSize === 100) {
+			maxPenSizeReached = true;
+		}
+		return penSize++;
+	}
+	 
+	if(maxPenSizeReached === true) {
+		if (penSize === 5) {
+			maxPenSizeReached = false;
+		}
+		return penSize--;
+	}
+}
 
-  return function (event) {
-    event.shiftKey ? currentHue-- : currentHue++;
-
-    if (currentHue < minHue) {
-      currentHue = maxHue;
-    }
-
-    if (currentHue > maxHue) {
-       currentHue = minHue;
-    }
-
-    return currentHue;
-  }
+function penHueChanger() {
+	if (shiftPressed === false) {
+		if (penHue === 359) {
+			penHue = 0;
+		}
+		penHue++;
+	}
+	 
+	if(shiftPressed === true) {
+	 	if (penHue === 0) {
+	 		penHue = 359;
+	 	}
+	 	penHue--;
+	}
 }
