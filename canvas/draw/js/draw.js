@@ -113,9 +113,9 @@ function penHueChanger() {
   }
    
   if(shiftPressed === true) {
-     if (penHue === 0) {
-       penHue = 359;
-     }
-     penHue--;
+    if (penHue === 0) {
+      penHue = 359;
+    }
+    penHue--;
   }
 }
