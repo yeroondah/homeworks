@@ -13,58 +13,58 @@ loader.classList.remove('hidden');
 let xhr = new XMLHttpRequest();
 
 xhr.addEventListener('load', () => {
-	converter.classList.remove('hidden');
-	loader.classList.add('hidden');
+  converter.classList.remove('hidden');
+  loader.classList.add('hidden');
 })
 
 window.addEventListener('load', () => {
 
-	xhr.open(
-		"GET",
-		"https://neto-api.herokuapp.com/currency",
-		false
-	);
-	xhr.send();
+  xhr.open(
+    "GET",
+    "https://neto-api.herokuapp.com/currency",
+    false
+  );
+  xhr.send();
 
-	let currencyData = JSON.parse(xhr.responseText);
+  let currencyData = JSON.parse(xhr.responseText);
 
-	createCurrencyList(convertFromField);
-	createCurrencyList(convertToField);
+  createCurrencyList(convertFromField);
+  createCurrencyList(convertToField);
 
 
-	amountField.addEventListener('input', (e) => {
-		convertCurrency();
-	});
+  amountField.addEventListener('input', (e) => {
+    convertCurrency();
+  });
 
-	convertFromField.addEventListener('change', (e) => {
-		convertCurrency();
-	});
+  convertFromField.addEventListener('change', (e) => {
+    convertCurrency();
+  });
 
-	convertToField.addEventListener('change', (e) => {
-		convertCurrency();
-	});
+  convertToField.addEventListener('change', (e) => {
+    convertCurrency();
+  });
 
-	function createCurrencyList(parent) {
-		for (let currency of currencyData) {
-			let option = document.createElement('option');
-			option.innerHTML = currency.code;
-			parent.appendChild(option);
-		}
-	}
+  function createCurrencyList(parent) {
+    for (let currency of currencyData) {
+      let option = document.createElement('option');
+      option.innerHTML = currency.code;
+      parent.appendChild(option);
+    }
+  }
 
-	function getCurrencyValue(target) {
-		let value = currencyData.find(function(elem) {
-			return elem.code === target;
-		});
-		return value.value;
-	}
+  function getCurrencyValue(target) {
+    let value = currencyData.find(function(elem) {
+      return elem.code === target;
+    });
+    return value.value;
+  }
 
-	function convertCurrency() {
-		let a = parseInt(amountField.value);
-		let b = parseInt(getCurrencyValue(convertFromField.value));
-		let c = parseInt(getCurrencyValue(convertToField.value));
-		result.value = parseFloat(a * b / c).toFixed(2);
-	}
+  function convertCurrency() {
+    let a = parseInt(amountField.value);
+    let b = parseInt(getCurrencyValue(convertFromField.value));
+    let c = parseInt(getCurrencyValue(convertToField.value));
+    result.value = parseFloat(a * b / c).toFixed(2);
+  }
 });
 
 
