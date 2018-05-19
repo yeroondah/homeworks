@@ -32,15 +32,15 @@ window.addEventListener('load', () => {
   createCurrencyList(convertToField);
 
 
-  amountField.addEventListener('input', (e) => {
+  amountField.addEventListener('input', () => {
     convertCurrency();
   });
 
-  convertFromField.addEventListener('change', (e) => {
+  convertFromField.addEventListener('change', () => {
     convertCurrency();
   });
 
-  convertToField.addEventListener('change', (e) => {
+  convertToField.addEventListener('change', () => {
     convertCurrency();
   });
 
